@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Import WhatsApp Backup</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <div class="app">
+    <div class="panel">
+      <div class="header">
+        <div class="icon">📱</div>
+        <div class="title-wrap">
+          <h2>Import File WhatsApp</h2>
+          <p>Unggah backup WhatsApp (tar.gz) untuk analisis pesan masuk.</p>
+        </div>
+        <button class="close-btn">×</button>
+      </div>
+
+      <form id="uploadForm" enctype="multipart/form-data">
+        <div class="upload-row">
+          <label class="upload-box">
+            <input type="file" name="file" accept=".tar,.gz,.tar.gz" />
+            <span>Upload File</span>
+          </label>
+          <button type="button" class="secondary-btn">Cari File</button>
+        </div>
+      </form>
+
+      <div class="step-row">
+        <span class="step done">✓ Detail</span>
+        <span class="step done">✓ Validasi</span>
+        <span class="step active">3 Proses</span>
+      </div>
+
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-label">TOTAL</div>
+          <div class="stat-value"><%= total %></div>
+        </div>
+        <div class="stat">
+          <div class="stat-label" style="color: #1dbf73;">BERHASIL</div>
+          <div class="stat-value"><%= valid %></div>
+        </div>
+        <div class="stat">
+          <div class="stat-label" style="color: #f5a623;">DUPLIKAT</div>
+          <div class="stat-value"><%= duplicates %></div>
+        </div>
+        <div class="stat">
+          <div class="stat-label" style="color: #ef5b5b;">GAGAL</div>
+          <div class="stat-value"><%= invalid %></div>
+        </div>
+      </div>
+
+      <div class="progress-block">
+        <div class="progress-label">
+          <span>PROGRESS</span>
+          <span id="progress-text"><%= valid %> / <%= total %></span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" style="width: <%= total ? (valid / total) * 100 : 0 %>%"></div>
+        </div>
+      </div>
+
+      <div class="log-box">
+        <div class="log-header">LOG AKTIVITAS</div>
+
+        <% if (records.length === 0) { %>
+          <div class="empty">Belum ada data. Upload file WhatsApp backup (.tar.gz)</div>
+        <% } else { %>
+          <div class="log-list">
+            <% records.slice(0, 10).forEach((item) => { %>
+              <div class="log-item">
+                <input type="checkbox" class="log-check" />
+                <div class="log-content">
+                  <div class="log-phone"><%= item.phoneNormalized || item.rawPhone || '-' %></div>
+                  <div class="log-preview"><%= item.message ? item.message.substring(0, 60) + '...' : 'Tidak ada pesan' %></div>
+                </div>
+                <span class="badge <%= item.status %>"><%= item.status.toUpperCase() %></span>
+              </div>
+            <% }); %>
+          </div>
+
+          <% if (records.length > 10) { %>
+            <div class="log-more">+<%= records.length - 10 %> lainnya</div>
+          <% } %>
+        <% } %>
+      </div>
+
+      <button type="button" id="processBtn" class="process-btn">Proses...</button>
+    </div>
+  </div>
+
+  <script src="/script.js"></script>
+</body>
+</html>
