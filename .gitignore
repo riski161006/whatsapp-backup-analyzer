@@ -1,7 +1,5 @@
 node_modules/
-uploads/
-extracted/
-data/
+workspace/
 .env
 .DS_Store
 *.log
